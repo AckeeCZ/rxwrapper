@@ -7,3 +7,5 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'io.reactivex:rxjava:1.1.8'
 }
+
+apply from: rootProject.file('gradle/gradle-mvn-push.gradle')

@@ -26,3 +26,6 @@ dependencies {
     compile project(':annotations')
 
 }
+
+
+apply from: rootProject.file('gradle/gradle-mvn-push.gradle')

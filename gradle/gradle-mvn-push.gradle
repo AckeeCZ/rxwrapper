@@ -17,13 +17,12 @@ def getDestUrl() {
 
 publishing {
     publications {
-        aar(MavenPublication) { // Publish aar knihovnu
+        jar(MavenPublication) {
             groupId GROUP
             version = VERSION_NAME
             artifactId POM_ARTIFACT_ID
+            from components.java
 
-            // Tell maven to prepare the generated "*.aar" file for publishing
-            artifact("$buildDir/outputs/aar/${project.getName()}-release.aar")
         }
     }
     repositories {
