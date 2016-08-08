@@ -1,8 +1,14 @@
-# RxWrapper Android Library
+y# RxWrapper Android Library
 This simple library provides mechanism to add custom .compose(Observable.Transformer) to every method, that returns Observable<T> via annotation processor and generated classes
 
 ## Purpose of this library
-The main purpose of this library was usage of our RxOauth library that requires to add `.compose(rxManager.wrapWithOauthHandling())` code to every request. It`s boilerplate code, relying on developer awarness to at this code to every new request he writes. 
+The main purpose of this library was usage of our RxOauth library that requires to add `.compose(rxManager.wrapWithOauthHandling())` code to every request. It`s boilerplate code, relying on developer awarness to at this code to every new request he writes.
+ 
+## Dependencies
+```groovy
+apt"cz.ackee.rxwrapper:processor:0.1.1"
+compile "cz.ackee.rxwrapper:annotations:0.1.1"
+```
 
 ### Usage
 The usage is simple, the best case scenario can be demonstrated with Retrofit ApiService description. Simply annotate this class with `@WrappedService` annotation and wrapping class will be generated
