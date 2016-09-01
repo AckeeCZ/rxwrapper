@@ -1,4 +1,4 @@
-y# RxWrapper Android Library
+# RxWrapper Android Library
 This simple library provides mechanism to add custom .compose(Observable.Transformer) to every method, that returns Observable<T> via annotation processor and generated classes
 
 ## Purpose of this library
@@ -85,6 +85,3 @@ and then, wherever you would use original `ApiDescription` class you will use `a
 
 ## Working project
 The first project that adaptated this library along with RxOauth is babysitting-v2-android so feel free to inspire there
-
-
-
