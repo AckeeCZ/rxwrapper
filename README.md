@@ -1,5 +1,7 @@
 # RxWrapper Android Library
-This simple library provides mechanism to add custom .compose(Observable.Transformer) to every method, that returns Observable<T> via annotation processor and generated classes
+This simple library provides mechanism to add custom .compose(ObservableTransformer) to every method, that returns Observable<T> via annotation processor and generated classes
+
+This library is based on RxJava2
 
 ## Purpose of this library
 The main purpose of this library was usage of our RxOauth library that requires to add `.compose(rxManager.wrapWithOauthHandling())` code to every request. It`s boilerplate code, relying on developer awarness to at this code to every new request he writes.
@@ -74,7 +76,7 @@ RxOauthManager manager = ...
 ApiDescription apiDescription = ...
 ApiDescription apiWrapper = new ApiDescriptionWrapped(apiDescription, new IComposeWrapper() {
             @Override
-            public <T> Observable.Transformer<T, T> wrap() {
+            public <T> ObservableTransformer<T, T> wrap() {
                 return rxOauthManaging.wrapWithOAuthHandling();
             }
         });

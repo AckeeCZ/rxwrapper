@@ -30,7 +30,6 @@ public class WrapEnclosingMethod {
 
     public WrapEnclosingMethod(ExecutableElement methodElement) {
         scanElement(methodElement);
-
     }
 
     public boolean isReachable() {
@@ -49,9 +48,9 @@ public class WrapEnclosingMethod {
         if (returnType.getKind() == TypeKind.DECLARED) {
             DeclaredType type = (DeclaredType) returnType;
             TypeElement clz = (TypeElement) type.asElement();
-            foundSomeClass = clz.getQualifiedName().toString().equals("rx.Observable")
-                    || clz.getQualifiedName().toString().equals("rx.Single")
-                    || clz.getQualifiedName().toString().equals("rx.Completable");
+            foundSomeClass = clz.getQualifiedName().toString().equals("io.reactivex.Observable")
+                    || clz.getQualifiedName().toString().equals("io.reactivex.Single")
+                    || clz.getQualifiedName().toString().equals("io.reactivex.Completable");
         }
         this.shouldWrap = this.shouldWrap && foundSomeClass;
     }
