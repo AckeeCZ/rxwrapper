@@ -10,11 +10,18 @@ import javax.lang.model.element.Modifier;
 import javax.lang.model.element.Name;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.ArrayType;
 import javax.lang.model.type.DeclaredType;
+import javax.lang.model.type.ErrorType;
+import javax.lang.model.type.PrimitiveType;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
+import javax.lang.model.type.TypeVariable;
+import javax.lang.model.util.SimpleTypeVisitor6;
 
 import cz.ackee.wrapper.annotations.NoCompose;
+
+import static cz.ackee.wrapper.Util.rawTypeToString;
 
 /**
  * Method that will be wrapped iwth oauth handling
@@ -40,6 +47,8 @@ public class WrapEnclosingMethod {
 
         this.methodName = methodElement.getSimpleName();
         this.returnType = methodElement.getReturnType();
+
+
         this.isPrivate = methodElement.getModifiers().contains(Modifier.PRIVATE) ||
                 methodElement.getModifiers().contains(Modifier.PROTECTED);
         this.parameters = methodElement.getParameters();
@@ -61,6 +70,14 @@ public class WrapEnclosingMethod {
                 .addModifiers(Modifier.PUBLIC)
                 .returns(TypeName.get(returnType));
 
+        String observableType = null;
+        if (shouldWrap) {
+
+            StringBuilder res = new StringBuilder();
+            Util.typeToString(((DeclaredType) returnType).getTypeArguments().get(0), res, ',');
+            observableType = res.toString();
+        }
+
         String paramNames = "";
         for (VariableElement element : this.parameters) {
             if (paramNames.length() > 0) {
@@ -69,8 +86,8 @@ public class WrapEnclosingMethod {
             builder.addParameter(TypeName.get(element.asType()), element.getSimpleName().toString());
             paramNames += element.getSimpleName().toString();
         }
-        builder.addStatement("return this.service.$L($L)$L", methodName.toString(), paramNames, shouldWrap ? ".compose(this.rxWrapper.wrap())" : "");
-
+        builder.addStatement("return this.service.$L($L)$L", methodName.toString(), paramNames, shouldWrap ? ".<" + observableType + ">compose(this.rxWrapper.<" + observableType + ">wrap())" : "");
         return builder.build();
     }
+
 }
