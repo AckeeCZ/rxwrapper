@@ -10,18 +10,11 @@ import javax.lang.model.element.Modifier;
 import javax.lang.model.element.Name;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
-import javax.lang.model.type.ArrayType;
 import javax.lang.model.type.DeclaredType;
-import javax.lang.model.type.ErrorType;
-import javax.lang.model.type.PrimitiveType;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
-import javax.lang.model.type.TypeVariable;
-import javax.lang.model.util.SimpleTypeVisitor6;
 
 import cz.ackee.wrapper.annotations.NoCompose;
-
-import static cz.ackee.wrapper.Util.rawTypeToString;
 
 /**
  * Method that will be wrapped iwth oauth handling
@@ -34,6 +27,11 @@ public class WrapEnclosingMethod {
     private boolean isPrivate;
     private List<? extends VariableElement> parameters;
     private boolean shouldWrap;
+    private FoundType foundType = null;
+
+    enum FoundType {
+        OBSERVABLE, SINGLE, COMLETABLE
+    }
 
     public WrapEnclosingMethod(ExecutableElement methodElement) {
         scanElement(methodElement);
@@ -53,15 +51,20 @@ public class WrapEnclosingMethod {
                 methodElement.getModifiers().contains(Modifier.PROTECTED);
         this.parameters = methodElement.getParameters();
         this.shouldWrap = methodElement.getAnnotation(NoCompose.class) == null;
-        boolean foundSomeClass = false;
         if (returnType.getKind() == TypeKind.DECLARED) {
             DeclaredType type = (DeclaredType) returnType;
             TypeElement clz = (TypeElement) type.asElement();
-            foundSomeClass = clz.getQualifiedName().toString().equals("io.reactivex.Observable")
-                    || clz.getQualifiedName().toString().equals("io.reactivex.Single")
-                    || clz.getQualifiedName().toString().equals("io.reactivex.Completable");
+            if (clz.getQualifiedName().toString().equals("io.reactivex.Observable")) {
+                foundType = FoundType.OBSERVABLE;
+            }
+            if (clz.getQualifiedName().toString().equals("io.reactivex.Single")) {
+                foundType = FoundType.SINGLE;
+            }
+            if (clz.getQualifiedName().toString().equals("io.reactivex.Completable")) {
+                foundType = FoundType.COMLETABLE;
+            }
         }
-        this.shouldWrap = this.shouldWrap && foundSomeClass;
+        this.shouldWrap = this.shouldWrap && foundType != null;
     }
 
     public MethodSpec generateCode() {
@@ -86,7 +89,21 @@ public class WrapEnclosingMethod {
             builder.addParameter(TypeName.get(element.asType()), element.getSimpleName().toString());
             paramNames += element.getSimpleName().toString();
         }
-        builder.addStatement("return this.service.$L($L)$L", methodName.toString(), paramNames, shouldWrap ? ".<" + observableType + ">compose(this.rxWrapper.<" + observableType + ">wrap())" : "");
+        if (foundType != null) {
+            switch (foundType) {
+                case OBSERVABLE:
+                    builder.addStatement("return this.service.$L($L)$L", methodName.toString(), paramNames, ".<" + observableType + ">compose(this.rxWrapper.<" + observableType + ">wrapObservable())");
+                    break;
+                case SINGLE:
+                    builder.addStatement("return this.service.$L($L)$L", methodName.toString(), paramNames, ".<" + observableType + ">compose(this.rxWrapper.<" + observableType + ">wrapSingle())");
+                    break;
+                case COMLETABLE:
+                    builder.addStatement("return this.service.$L($L)$L", methodName.toString(), paramNames, ".<" + observableType + ">compose(this.rxWrapper.wrapCompletable())");
+                    break;
+            }
+        } else {
+            builder.addStatement("return this.service.$L($L)", methodName.toString(), paramNames);
+        }
         return builder.build();
     }
 
