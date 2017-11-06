@@ -24,10 +24,10 @@ dependencies {
     compile 'com.google.auto.service:auto-service:1.0-rc2'
     compile 'com.squareup:javapoet:1.0.0'
     compile project(':annotations')
-
-    apt"cz.ackee.rxwrapper:processor:0.1.1"
-    compile "cz.ackee.rxwrapper:annotations:0.1.1"
-    compile "cz.ackee.rxoauth:annotations:0.1.1"
+//
+//    apt"cz.ackee.rxwrapper:processor:0.1.1"
+//    compile "cz.ackee.rxwrapper:annotations:0.1.1"
+//    compile "cz.ackee.rxoauth:annotations:0.1.1"
 
 }
 

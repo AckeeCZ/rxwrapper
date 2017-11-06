@@ -61,6 +61,14 @@ public class WrapEnclosingMethod {
         MethodSpec.Builder builder = MethodSpec.methodBuilder(methodName.toString())
                 .addModifiers(Modifier.PUBLIC)
                 .returns(TypeName.get(returnType));
+        String observableType = "";
+        if (shouldWrap) {
+
+            StringBuilder res = new StringBuilder();
+            Util.typeToString(((DeclaredType) returnType).getTypeArguments().get(0), res, ',');
+            observableType = res.toString();
+        }
+
 
         String paramNames = "";
         for (VariableElement element : this.parameters) {
@@ -70,7 +78,7 @@ public class WrapEnclosingMethod {
             builder.addParameter(TypeName.get(element.asType()), element.getSimpleName().toString());
             paramNames += element.getSimpleName().toString();
         }
-        builder.addStatement("return this.service.$L($L)$L", methodName.toString(), paramNames, shouldWrap ? ".compose(this.rxWrapper.wrap())" : "");
+        builder.addStatement("return this.service.$L($L)$L", methodName.toString(), paramNames, shouldWrap ? ".compose(this.rxWrapper.<"+observableType+">wrap())" : "");
 
         return builder.build();
     }
