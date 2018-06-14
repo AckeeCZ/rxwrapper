@@ -1,3 +1,5 @@
+[ ![Download](https://api.bintray.com/packages/ackeecz/rxwrapper2/annotations/images/download.svg) ](https://bintray.com/ackeecz/rxwrapper2/annotations/_latestVersion)
+
 # RxWrapper Android Library
 This simple library provides mechanism to add custom .compose(ObservableTransformer) to every method, that returns Observable<T> via annotation processor and generated classes
 
