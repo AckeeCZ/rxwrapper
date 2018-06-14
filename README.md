@@ -83,7 +83,3 @@ ApiDescription apiWrapper = new ApiDescriptionWrapped(apiDescription, new ICompo
 ```
 
 and then, wherever you would use original `ApiDescription` class you will use `apiWrapper`
-
-
-## Working project
-The first project that adaptated this library along with RxOauth is babysitting-v2-android so feel free to inspire there
