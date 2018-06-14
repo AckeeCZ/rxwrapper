@@ -8,4 +8,13 @@ dependencies {
     compile 'io.reactivex.rxjava2:rxjava:2.0.1'
 }
 
-apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
+ext {
+    bintrayName = 'annotations'
+    publishedArtifactId = 'annotations'
+
+    libraryName = 'Annotations'
+    libraryDescription = 'Annotations for Annotation processor'
+}
+
+apply from: rootProject.file('gradle/bintray/install.gradle')
+apply from: rootProject.file('gradle/bintray/bintray.gradle')

@@ -2,12 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/RxWrapper.iml" filepath="$PROJECT_DIR$/RxWrapper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/android-rx-wrapper.iml" filepath="$PROJECT_DIR$/.idea/modules/android-rx-wrapper.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/annotations/annotations.iml" filepath="$PROJECT_DIR$/.idea/modules/annotations/annotations.iml" />
-      <module fileurl="file://$PROJECT_DIR$/annotations/annotations.iml" filepath="$PROJECT_DIR$/annotations/annotations.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/processor/processor.iml" filepath="$PROJECT_DIR$/.idea/modules/processor/processor.iml" />
-      <module fileurl="file://$PROJECT_DIR$/processor/processor.iml" filepath="$PROJECT_DIR$/processor/processor.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/rx-wrapper.iml" filepath="$PROJECT_DIR$/.idea/modules/rx-wrapper.iml" />
     </modules>
   </component>
 </project>

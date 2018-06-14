@@ -3,7 +3,7 @@ apply plugin: 'java'
 targetCompatibility = '1.7'
 sourceCompatibility = '1.7'
 
-version = '1.0'
+version = libProperties['VERSION_NAME']
 jar {
     manifest {
         attributes 'Implementation-Title': 'Annotation processor that will wrap methods in annotated classes or interfaces to same named method and compose them with custom Observable.Transformer',
@@ -26,5 +26,13 @@ dependencies {
     compile project(':annotations')
 }
 
+ext {
+    bintrayName = 'processor'
+    publishedArtifactId = 'processor'
 
-apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
+    libraryName = 'Annotation processor of the Rx Wrapper'
+    libraryDescription = 'Annotation processor that generates classes that wraps method results with some transformer'
+}
+
+apply from: rootProject.file('gradle/bintray/install.gradle')
+apply from: rootProject.file('gradle/bintray/bintray.gradle')
