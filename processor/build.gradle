@@ -3,7 +3,7 @@ apply plugin: 'java'
 targetCompatibility = '1.7'
 sourceCompatibility = '1.7'
 
-version = '1.0'
+version = libProperties['VERSION_NAME']
 jar {
     manifest {
         attributes 'Implementation-Title': 'Annotation processor that will wrap methods in annotated classes or interfaces to same named method and compose them with custom Observable.Transformer',
@@ -20,16 +20,19 @@ uploadArchives {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.google.auto.service:auto-service:1.0-rc2'
-    compile 'com.squareup:javapoet:1.0.0'
-    compile project(':annotations')
-//
-//    apt"cz.ackee.rxwrapper:processor:0.1.1"
-//    compile "cz.ackee.rxwrapper:annotations:0.1.1"
-//    compile "cz.ackee.rxoauth:annotations:0.1.1"
-
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.google.auto.service:auto-service:1.0-rc2'
+    implementation 'com.squareup:javapoet:1.0.0'
+    implementation project(':annotations')
 }
 
+ext {
+    bintrayName = 'processor'
+    publishedArtifactId = 'processor'
 
-apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
+    libraryName = 'Annotation processor of the Rx Wrapper'
+    libraryDescription = 'Annotation processor that generates classes that wraps method results with some transformer'
+}
+
+apply from: rootProject.file('gradle/bintray/install.gradle')
+apply from: rootProject.file('gradle/bintray/bintray.gradle')
