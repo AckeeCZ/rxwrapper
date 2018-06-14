@@ -3,6 +3,23 @@ apply plugin: 'java'
 
 targetCompatibility = '1.7'
 sourceCompatibility = '1.7'
+
+version = libProperties['VERSION_NAME']
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Annotations for the annotation processor',
+                'Implementation-Version': version
+    }
+}
+
+uploadArchives {
+    repositories {
+        flatDir {
+            dirs 'outputs'
+        }
+    }
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'io.reactivex:rxjava:1.1.8'
