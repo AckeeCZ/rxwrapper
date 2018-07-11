@@ -17,9 +17,8 @@ import javax.lang.model.type.TypeMirror;
 import cz.ackee.wrapper.annotations.NoCompose;
 
 /**
- * Method that will be wrapped iwth oauth handling
- * Created by David Bilik[david.bilik@ackee.cz] on {06/08/16}
- **/
+ * Method that will be wrapped with oauth handling
+ */
 public class WrapEnclosingMethod {
     public static final String TAG = WrapEnclosingMethod.class.getName();
     private Name methodName;
@@ -74,8 +73,7 @@ public class WrapEnclosingMethod {
                 .returns(TypeName.get(returnType));
 
         String observableType = null;
-        if (shouldWrap) {
-
+        if (shouldWrap && (foundType == FoundType.OBSERVABLE || foundType == FoundType.SINGLE)) {
             StringBuilder res = new StringBuilder();
             Util.typeToString(((DeclaredType) returnType).getTypeArguments().get(0), res, ',');
             observableType = res.toString();
@@ -89,7 +87,7 @@ public class WrapEnclosingMethod {
             builder.addParameter(TypeName.get(element.asType()), element.getSimpleName().toString());
             paramNames += element.getSimpleName().toString();
         }
-        if (foundType != null) {
+        if (foundType != null && shouldWrap) {
             switch (foundType) {
                 case OBSERVABLE:
                     builder.addStatement("return this.service.$L($L)$L", methodName.toString(), paramNames, ".<" + observableType + ">compose(this.rxWrapper.<" + observableType + ">wrapObservable())");
@@ -98,7 +96,7 @@ public class WrapEnclosingMethod {
                     builder.addStatement("return this.service.$L($L)$L", methodName.toString(), paramNames, ".<" + observableType + ">compose(this.rxWrapper.<" + observableType + ">wrapSingle())");
                     break;
                 case COMLETABLE:
-                    builder.addStatement("return this.service.$L($L)$L", methodName.toString(), paramNames, ".<" + observableType + ">compose(this.rxWrapper.wrapCompletable())");
+                    builder.addStatement("return this.service.$L($L)$L", methodName.toString(), paramNames, ".compose(this.rxWrapper.wrapCompletable())");
                     break;
             }
         } else {
