@@ -10,8 +10,8 @@ The main purpose of this library was usage of our RxOauth library that requires 
  
 ## Dependencies
 ```groovy
-apt"cz.ackee.rxwrapper:processor:x.x.x"
-compile "cz.ackee.rxwrapper:annotations:x.x.x"
+apt"cz.ackee.rxwrapper2:processor:x.x.x"
+compile "cz.ackee.rxwrappe2r:annotations:x.x.x"
 ```
 
 ### Usage
